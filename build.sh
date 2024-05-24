@@ -15,13 +15,11 @@ echo "[+] Installing tools"
 
 apt install -y build-essential git wget curl net-tools
 apt install -y apache2 php libapache2-mod-php mysql-server php-mysql
-mysql_secure_installation
 
 # Log in to MySQL
 echo "[+] Creating MySQL Database"
 
-mysql -u root -p
-
+mysql -u root <<MYSQL_SCRIPT
 # Create a database and user
 CREATE DATABASE ctf_db;
 CREATE USER 'ctf_user'@'localhost' IDENTIFIED BY 'password';
@@ -36,10 +34,10 @@ password VARCHAR(255) NOT NULL,
 PRIMARY KEY (id)  
 );
 
-INSERT INTO users (username, password) VALUES (‘admin’, ‘password123’);
+INSERT INTO users (username, password) VALUES ('admin', 'password123');
 
 FLUSH PRIVILEGES;
-EXIT;
+MYSQL_SCRIPT
 
 # Create a Vulnerable Web Application
 echo "[+] Creating Web App"
@@ -57,6 +55,7 @@ apt install -y vsftpd
 systemctl enable vsftpd
 cp vsftpd.conf /etc/
 systemctl start vsftpd
+systemctl restart vsftpd
 
 # Weak Passwords
 echo "[+] Adding User"
