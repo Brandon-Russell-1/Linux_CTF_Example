@@ -62,8 +62,22 @@ echo "[+] Adding User"
 
 useradd -m -p $(openssl passwd -1 password123) weakuser
 
+# Add Flags
+echo "[+] Dropping flags"
+echo "30fb71445c24c68e6025df305b03b635" > /root/proof.txt
+echo "c385595700173861809d7685bcccf997" > /home/weakuser/local.txt
+chmod 0700 /root/proof.txt
+chmod 0644 /home/weakuser/local.txt
+chown weakuser:weakuser /home/weakuser/local.txt 
+
+
 # Clean up files
 echo "[+] Cleaning up"
 rm -rf /root/build.sh
 rm -rf /root/index.php
 rm -rf /root/vsftpd.conf
+
+
+echo "[+] Disabling history files"
+cat /dev/null > /home/weakuser/.bash_history && history -c && exit
+cat /dev/null > /root/.bash_history && history -c && init 0
