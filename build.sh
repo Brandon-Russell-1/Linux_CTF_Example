@@ -1,9 +1,26 @@
-sudo apt install -y build-essential git wget curl net-tools
-sudo apt install -y apache2 php libapache2-mod-php mysql-server php-mysql
-sudo mysql_secure_installation
+#!/usr/bin/env bash
+set -e
+
+#
+# Note: It is assumed that the build script will be run as the root user.
+#
+
+# Update and Upgrade
+echo "[+] Updating"
+
+apt update && apt upgrade -y
+
+# Install Essential Tools
+echo "[+] Installing tools"
+
+apt install -y build-essential git wget curl net-tools
+apt install -y apache2 php libapache2-mod-php mysql-server php-mysql
+mysql_secure_installation
 
 # Log in to MySQL
-sudo mysql -u root -p
+echo "[+] Creating MySQL Database"
+
+mysql -u root -p
 
 # Create a database and user
 CREATE DATABASE ctf_db;
@@ -24,15 +41,30 @@ INSERT INTO users (username, password) VALUES (‘admin’, ‘password123’);
 FLUSH PRIVILEGES;
 EXIT;
 
-sudo systemctl restart apache2
+# Create a Vulnerable Web Application
+echo "[+] Creating Web App"
 
-sudo apt install -y vsftpd
+rm -rf /var/www/html/index.html
+cp index.php /var/www/html/
 
-sudo systemctl enable vsftpd
+systemctl restart apache2
 
-mv /mnt/hgfs/MyShare/vsftpd.conf /etc/
+# Insecure Services
+# Configure the FTP server
+echo "[+] Configuring FTP"
 
-sudo systemctl start vsftpd
+apt install -y vsftpd
+systemctl enable vsftpd
+cp vsftpd.conf /etc/
+systemctl start vsftpd
 
+# Weak Passwords
+echo "[+] Adding User"
 
-sudo useradd -m -p $(openssl passwd -1 password123) weakuser
+useradd -m -p $(openssl passwd -1 password123) weakuser
+
+# Clean up files
+echo "[+] Cleaning up"
+rm -rf /root/build.sh
+rm -rf /root/index.php
+rm -rf /root/vsftpd.conf
