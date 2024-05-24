@@ -84,7 +84,9 @@ echo "[+] Cleaning up"
 rm -rf /root/build.sh
 rm -rf /root/index.php
 rm -rf /root/vsftpd.conf
-
+rm -rf /root/000-default.conf
+rm -rf /root/adminnote.txt
+rm -rf /root/apache2.conf
 
 echo "[+] Disabling history files"
 cat /dev/null > /home/weakuser/.bash_history && history -c && exit
