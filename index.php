@@ -14,6 +14,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
+    // Log user input to Apache logs
+    error_log("Username: $username, Password: $password");
+
     $sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
     $result = $conn->query($sql);
 

@@ -45,6 +45,11 @@ echo "[+] Creating Web App"
 rm -rf /var/www/html/index.html
 cp index.php /var/www/html/
 
+touch /var/www/html/access_log.php
+chmod 666 /var/www/html/access_log.php
+chown www-data:www-data /var/www/html/access_log.php
+cp apache2.conf /etc/apache2/
+cp 000-default.conf /etc/apache2/sites-available/
 systemctl restart apache2
 
 # Insecure Services
@@ -54,6 +59,7 @@ echo "[+] Configuring FTP"
 apt install -y vsftpd
 systemctl enable vsftpd
 cp vsftpd.conf /etc/
+cp adminnote.txt /srv/ftp/
 systemctl start vsftpd
 systemctl restart vsftpd
 
@@ -61,6 +67,8 @@ systemctl restart vsftpd
 echo "[+] Adding User"
 
 useradd -m -p $(openssl passwd -1 password123) weakuser
+adduser weakuser sudo
+
 
 # Add Flags
 echo "[+] Dropping flags"

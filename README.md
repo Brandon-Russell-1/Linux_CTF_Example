@@ -17,4 +17,7 @@ This virtual machine is designed specifically for Capture The Flag (CTF) challen
     - `build.sh`
     - `index.php`
     - `vsftpd.conf`
+    - `000-default.conf`
+    - `adminnote.txt`
+    - `apache2.conf`
 5. Change to `/root` and run `build.sh`
