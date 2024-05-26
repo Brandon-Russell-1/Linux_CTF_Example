@@ -50,6 +50,8 @@ chmod 666 /var/www/html/access_log.php
 chown www-data:www-data /var/www/html/access_log.php
 cp apache2.conf /etc/apache2/
 cp 000-default.conf /etc/apache2/sites-available/
+mkdir /var/www/html/test
+cp log.txt /var/www/html/test/
 systemctl restart apache2
 
 # Insecure Services
@@ -66,17 +68,17 @@ systemctl restart vsftpd
 # Weak Passwords
 echo "[+] Adding User"
 
-useradd -m -p $(openssl passwd -1 password123) weakuser
-adduser weakuser sudo
+useradd -m -p $(openssl passwd -1 password123) jimmy
+adduser jimmy sudo
 
 
 # Add Flags
 echo "[+] Dropping flags"
 echo "30fb71445c24c68e6025df305b03b635" > /root/proof.txt
-echo "c385595700173861809d7685bcccf997" > /home/weakuser/local.txt
+echo "c385595700173861809d7685bcccf997" > /home/jimmy/local.txt
 chmod 0700 /root/proof.txt
-chmod 0644 /home/weakuser/local.txt
-chown weakuser:weakuser /home/weakuser/local.txt 
+chmod 0644 /home/jimmy/local.txt
+chown jimmy:jimmy /home/jimmy/local.txt 
 
 
 # Clean up files
@@ -87,7 +89,8 @@ rm -rf /root/vsftpd.conf
 rm -rf /root/000-default.conf
 rm -rf /root/adminnote.txt
 rm -rf /root/apache2.conf
+rm -rf /root/log.txt
 
 echo "[+] Disabling history files"
-cat /dev/null > /home/weakuser/.bash_history && history -c && exit
+cat /dev/null > /home/jimmy/.bash_history && history -c && exit
 cat /dev/null > /root/.bash_history && history -c && init 0
